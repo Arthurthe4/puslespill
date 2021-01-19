@@ -1,15 +1,33 @@
+//Modell
+
 var image = new Image();
 image.onload = cutImageUp;
-image.src = './src/phoenix.jpg';
+image.src = "../src/phoenix.jpg";
 widthOfOnePiece = 50;
 heightOfOnePiece = 50;
 numColsToCut = 10;
 numRowsToCut = 10;
+var imagePieces = []
 
+//Viewer
 
+function show() {
+    var puzzlearea = document.getElementById("puzzlearea")
+    var piecearea = document.getElementById("piecearea")
+
+    puzzlearea.innerHTML += `<img src="../src/phoenix.jpg" alt='picture'>`
+    for (var i in imagePieces) {
+        piecearea.innerHTML += `<img src="${imagePieces[i]}">`
+
+    }
+    
+}
+
+//Controller
+
+// This is the part which cut the image into pieces. 
 
 function cutImageUp() {
-    var imagePieces = [];
     for(var x = 0; x < numColsToCut; ++x) {
         for(var y = 0; y < numRowsToCut; ++y) {
             var canvas = document.createElement('canvas');
@@ -23,12 +41,10 @@ function cutImageUp() {
 
     // imagePieces now contains data urls of all the pieces of the image
 
-    // load all pieces onto into the div named base
+    
 
-    for (var i in imagePieces) {
-        document.getElementById("base").innerHTML += `<img src="${imagePieces[i]}">`
 
-    }
     
 
 }
+
