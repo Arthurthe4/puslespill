@@ -5,8 +5,6 @@ body{
     color: tomato;
     background-color: teal;
 }
-<<<<<<< Updated upstream
-=======
 
 h1{
     font-size: 100px; 
@@ -17,4 +15,11 @@ footer{
     font-size: 50px;
     text-align: right;
 }
->>>>>>> Stashed changes
+
+#bigPicture{
+    width: 500px;
+    height: 400px;
+
+}
+
+

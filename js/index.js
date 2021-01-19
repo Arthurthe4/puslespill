@@ -3,10 +3,10 @@
 var image = new Image();
 image.onload = cutImageUp;
 image.src = "../src/phoenix.jpg";
-widthOfOnePiece = 50;
-heightOfOnePiece = 50;
-numColsToCut = 10;
-numRowsToCut = 10;
+var numColsToCut = 10;
+var numRowsToCut = 10;
+var widthOfOnePiece = 50;
+var heightOfOnePiece = 50;
 var imagePieces = []
 
 //Viewer
@@ -15,7 +15,7 @@ function show() {
     var puzzlearea = document.getElementById("puzzlearea")
     var piecearea = document.getElementById("piecearea")
 
-    puzzlearea.innerHTML += `<img src="../src/phoenix.jpg" alt='picture'>`
+    puzzlearea.innerHTML += `<img id="bigPicture" src="../src/phoenix.jpg" alt='picture' >`
     for (var i in imagePieces) {
         piecearea.innerHTML += `<img src="${imagePieces[i]}">`
 
@@ -40,9 +40,6 @@ function cutImageUp() {
     }
 
     // imagePieces now contains data urls of all the pieces of the image
-
-    
-
 
     
 
