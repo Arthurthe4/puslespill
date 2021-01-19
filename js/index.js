@@ -1,6 +1,6 @@
 var image = new Image();
 image.onload = cutImageUp;
-image.src = 'myimage.jpg';
+image.src = './src/phoenix.jpg';
 widthOfOnePiece = 50;
 heightOfOnePiece = 50;
 numColsToCut = 10;
