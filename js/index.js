@@ -45,3 +45,24 @@ function cutImageUp() {
 
 }
 
+
+// https://www.w3schools.com/html/tryit.asp?filename=tryhtml5_draganddrop2
+function allowDrop(ev) {
+    ev.preventDefault();
+}
+
+function drag(ev) {
+    ev.dataTransfer.setData("text", ev.target.id);
+}
+
+function drop(ev) {
+    ev.preventDefault();
+    var data = ev.dataTransfer.getData("text");
+    ev.target.appendChild(document.getElementById(data));
+}
+
+/* <div id="div1" ondrop="drop(event)" ondragover="allowDrop(event)">
+  <img src="img_w3slogo.gif" draggable="true" ondragstart="drag(event)" id="drag1" width="88" height="31">
+</div>
+
+<div id="div2" ondrop="drop(event)" ondragover="allowDrop(event)"></div> */
