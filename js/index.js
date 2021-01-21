@@ -1,32 +1,65 @@
 //Modell
-
 var image = new Image();
 image.onload = cutImageUp;
-image.src = "../src/phoenix.jpg";
-var numColsToCut = 10;
-var numRowsToCut = 10;
+image.src = "../src/bil.jpg";
+var numColsToCut = 3;
+var numRowsToCut = 3;
 var widthOfOnePiece = image.width/numColsToCut;
 var heightOfOnePiece = image.height/numRowsToCut;
-var imagePieces = []
+var imagePieces = [];
 
 //Viewer
-
 function show() {
-    var puzzlearea = document.getElementById("puzzlearea")
+    var table = document.getElementById("table")
     var piecearea = document.getElementById("piecearea")
-
-    puzzlearea.appendChild(image)
-    for (var i in imagePieces) {
-        piecearea.innerHTML += `<img src="${imagePieces[i]}">`
-
+    var pieceHeight = 700/numRowsToCut
+    var pieceWidth = 700/numColsToCut
+    table.innerhtml += `
+    <div id="puzzlearea" 
+    style="
+        grid-template-rows: repeat(${numRowsToCut}, ${pieceHeight});
+        grid-template-columns: auto;
+    ">
+    </div>
+    `
+    for (i = 1; i <= numRowsToCut; i++) {
+        var puzzlearea = document.getElementById("puzzlearea")
+        puzzlearea.innerHTML += `
+            <div 
+                id="row${i}" 
+                class="row" 
+                style=";
+                height: auto;
+                display: grid;
+                grid-template-columns: 233px 233px 233px;
+                ">
+                </div>
+        `;
+        for ( c = 1; c <= numColsToCut; c++) {
+            var row = document.getElementById("row"+i)
+            row.innerHTML += `
+            <div 
+                id="piece${i}${c}" 
+                ondrop="drop(event)" 
+                ondragover="allowDrop(event)" 
+                class="place" 
+                style="height:233px; width:233px;">
+                </div>
+            `;
+        }
     }
-    
+    for (var i in imagePieces) {
+        piecearea.innerHTML += `
+        <div id="piece${i}" 
+        ondrop="drop(event)" 
+        ondragover="allowDrop(event)"  
+        width="${pieceWidth}" 
+        height="${pieceHeight}"> 
+        <img src="${imagePieces[i]}" draggable="true" ondragstart="drag(event)" id="drag${i}"> 
+        </div>`
+    }
 }
-
-//Controller
-
-// This is the part which cut the image into pieces. 
-
+//Controller// This is the part which cut the image into pieces. 
 function cutImageUp() {
     for(var x = 0; x < numColsToCut; ++x) {
         for(var y = 0; y < numRowsToCut; ++y) {
@@ -37,31 +70,17 @@ function cutImageUp() {
             context.drawImage(image, x * widthOfOnePiece, y * heightOfOnePiece, widthOfOnePiece, heightOfOnePiece, 0, 0, canvas.width, canvas.height);
             imagePieces.push(canvas.toDataURL());
         }
-    }
-
-    // imagePieces now contains data urls of all the pieces of the image
+    }// imagePieces now contains data urls of all the pieces of the image
 }
-
-
-
-// https://www.w3schools.com/html/tryit.asp?filename=tryhtml5_draganddrop2
+// Drag and Drop func
 function allowDrop(ev) {
     ev.preventDefault();
 }
-
 function drag(ev) {
     ev.dataTransfer.setData("text", ev.target.id);
 }
-
 function drop(ev) {
     ev.preventDefault();
     var data = ev.dataTransfer.getData("text");
     ev.target.appendChild(document.getElementById(data));
 }
-
-/* <div id="div1" ondrop="drop(event)" ondragover="allowDrop(event)">
-  <img src="img_w3slogo.gif" draggable="true" ondragstart="drag(event)" id="drag1" width="88" height="31">
-</div>
-
-<div id="div2" ondrop="drop(event)" ondragover="allowDrop(event)"></div> */
-
