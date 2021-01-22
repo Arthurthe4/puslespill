@@ -31,7 +31,7 @@ function show() {
                 style=";
                 height: auto;
                 display: grid;
-                grid-template-columns: 233px 233px 233px;
+                grid-template-columns: repeat(${numColsToCut}, ${pieceWidth}px);
                 ">
                 </div>
         `;
@@ -42,8 +42,8 @@ function show() {
                 id="piece${i}${c}" 
                 ondrop="drop(event)" 
                 ondragover="allowDrop(event)" 
-                class="place" 
-                style="height:233px; width:233px;">
+                class="place fill" 
+                style="height:${pieceHeight}px; width:${pieceWidth}px;">
                 </div>
             `;
         }
@@ -78,9 +78,16 @@ function allowDrop(ev) {
 }
 function drag(ev) {
     ev.dataTransfer.setData("text", ev.target.id);
+    document.getElementById(ev.target.id).parentElement.classList.remove("taken")
 }
 function drop(ev) {
     ev.preventDefault();
-    var data = ev.dataTransfer.getData("text");
-    ev.target.appendChild(document.getElementById(data));
+    if(ev.target.classList.contains("taken")) return
+    else {
+        var data = ev.dataTransfer.getData("text");
+        ev.target.appendChild(document.getElementById(data));
+        ev.target.classList.add("taken")
+    }
+
+
 }
