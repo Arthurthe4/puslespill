@@ -55,7 +55,7 @@ function show() {
         ondragover="allowDrop(event)"  
         width="${pieceWidth}" 
         height="${pieceHeight}"> 
-        <img src="${imagePieces[i]}" draggable="true" ondragstart="drag(event)" id="drag${i}"> 
+        <img src="${imagePieces[i]}" draggable="true" ondragstart="drag(event)" id="drag${i}" class="taken"> 
         </div>`
     }
 }
@@ -77,16 +77,22 @@ function allowDrop(ev) {
     ev.preventDefault();
 }
 function drag(ev) {
-    ev.dataTransfer.setData("text", ev.target.id);
-    document.getElementById(ev.target.id).parentElement.classList.remove("taken")
+    ev.dataTransfer.setData("text", ev.target.id)
+    ev.dataTransfer.setData("parent", ev.target.parentElement.id);
 }
 function drop(ev) {
     ev.preventDefault();
-    if(ev.target.classList.contains("taken")) return
+    if(ev.target.parentElement.classList.contains("taken")) return
     else {
+        ev.preventDefault();
         var data = ev.dataTransfer.getData("text");
+        var parent = ev.dataTransfer.getData("parent")
         ev.target.appendChild(document.getElementById(data));
+        console.log(ev.target)
         ev.target.classList.add("taken")
+        document.getElementById(parent).parentElement.classList.remove("taken")
+        console.log(ev.target)
+        
     }
 
 
