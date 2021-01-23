@@ -4,65 +4,62 @@ image.onload = cutImageUp;
 image.src = "../src/bil.jpg";
 var numColsToCut = 3;
 var numRowsToCut = 3;
-var widthOfOnePiece = image.width/numColsToCut;
-var heightOfOnePiece = image.height/numRowsToCut;
+var widthOfOnePiece = Math.floor(image.width/numColsToCut);
+var heightOfOnePiece = Math.floor(image.height/numRowsToCut);
 var imagePieces = [];
+var places = [];
 
 //Viewer
 function show() {
     var table = document.getElementById("table")
     var piecearea = document.getElementById("piecearea")
-    var pieceHeight = 700/numRowsToCut
-    var pieceWidth = 700/numColsToCut
-    table.innerhtml += `
-    <div id="puzzlearea" 
-    style="
-        grid-template-rows: repeat(${numRowsToCut}, ${pieceHeight});
-        grid-template-columns: auto;
-    ">
-    </div>
-    `
-    for (i = 1; i <= numRowsToCut; i++) {
-        var puzzlearea = document.getElementById("puzzlearea")
-        puzzlearea.innerHTML += `
-            <div 
-                id="row${i}" 
-                class="row" 
-                style=";
-                height: auto;
-                display: grid;
-                grid-template-columns: repeat(${numColsToCut}, ${pieceWidth}px);
-                ">
-                </div>
-        `;
-        for ( c = 1; c <= numColsToCut; c++) {
-            var row = document.getElementById("row"+i)
-            row.innerHTML += `
-            <div 
-                id="piece${i}${c}" 
-                ondrop="drop(event)" 
-                ondragover="allowDrop(event)" 
-                class="place fill" 
-                style="height:${pieceHeight}px; width:${pieceWidth}px;">
-                </div>
-            `;
-        }
+    var numberofpieces = imagePieces.length
+    let puzzlearea = document.createElement("div")
+    puzzlearea.id = "puzzlearea"
+    table.appendChild(puzzlearea)
+    
+    for (let i = 1; i<= numRowsToCut; i++) {
+        var w = heightOfOnePiece.toString() +"px "
+        var wr = w.repeat(numRowsToCut)
+        puzzlearea.style.gridTemplateRows = wr
     }
+
+    for (let i = 1; i<= numColsToCut; i++) {
+        var w = widthOfOnePiece.toString() +"px "
+        var wr = w.repeat(numColsToCut)
+        puzzlearea.style.gridTemplateColumns = wr
+    }
+
+    for (let i = 0; i<= (numberofpieces-1); i++) {
+        let div = document.createElement("div")
+        div.id = i
+        div.addEventListener("drop", drop)
+        div.addEventListener("dragover", allowDrop)
+        div.classList.add("place")
+        div.style.height = heightOfOnePiece
+        div.style.width = widthOfOnePiece
+        puzzlearea.appendChild(div)
+
+    }
+
+
     for (var i in imagePieces) {
+        places.push("")
         piecearea.innerHTML += `
         <div id="piece${i}" 
         ondrop="drop(event)" 
         ondragover="allowDrop(event)"  
-        width="${pieceWidth}" 
-        height="${pieceHeight}"> 
-        <img src="${imagePieces[i]}" draggable="true" ondragstart="drag(event)" id="drag${i}" class="taken"> 
+        width="${widthOfOnePiece}px" 
+        height="${heightOfOnePiece}px"> 
+        <img src="${imagePieces[i]}" draggable="true" ondragstart="drag(event)" id="p${i}"> 
         </div>`
     }
 }
+
 //Controller// This is the part which cut the image into pieces. 
 function cutImageUp() {
-    for(var x = 0; x < numColsToCut; ++x) {
-        for(var y = 0; y < numRowsToCut; ++y) {
+    for (var y = 0; y < numRowsToCut; ++y) {
+        for (var x = 0; x < numColsToCut; ++x) {
             var canvas = document.createElement('canvas');
             canvas.width = widthOfOnePiece;
             canvas.height = heightOfOnePiece;
@@ -78,22 +75,15 @@ function allowDrop(ev) {
 }
 function drag(ev) {
     ev.dataTransfer.setData("text", ev.target.id)
-    ev.dataTransfer.setData("parent", ev.target.parentElement.id);
+    if (ev.target.parentNode.id.length == 1) places[ev.target.parentNode.id] = "";
+    
 }
 function drop(ev) {
     ev.preventDefault();
-    if(ev.target.parentElement.classList.contains("taken")) return
-    else {
-        ev.preventDefault();
-        var data = ev.dataTransfer.getData("text");
-        var parent = ev.dataTransfer.getData("parent")
+    var data = ev.dataTransfer.getData("text");
+    if ( places[ev.target.id] == "") {
         ev.target.appendChild(document.getElementById(data));
-        console.log(ev.target)
-        ev.target.classList.add("taken")
-        document.getElementById(parent).parentElement.classList.remove("taken")
-        console.log(ev.target)
-        
+        places[ev.target.id] = data
     }
-
-
+    console.log(places)
 }
