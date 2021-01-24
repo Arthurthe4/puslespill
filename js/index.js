@@ -45,16 +45,34 @@ function show() {
 
     for (var i in imagePieces) {
         places.push("")
-        piecearea.innerHTML += `
-        <div id="piece${i}" 
-        ondrop="drop(event)" 
-        ondragover="allowDrop(event)"  
-        width="${widthOfOnePiece}px" 
-        height="${heightOfOnePiece}px"> 
-        <img src="${imagePieces[i]}" draggable="true" ondragstart="drag(event)" id="p${i}"> 
-        </div>`
+        let div = document.createElement("div")
+        div.id = "piece"+ i
+        div.ondrop = "drop"
+        div.ondragover = "allowDrop"
+        div.width = widthOfOnePiece + "px"
+        div.height = heightOfOnePiece + "px"
+        piecearea.appendChild(div)
+    }
+    var pieces = piecearea.children
+    console.log(pieces)
+    for ( var i=0; i<= (numberofpieces-1); i++) {
+        var piece = pieces[i];
+        console.log(piece)
+        var randomnumber = getRndInteger(0, (imagePieces.length-1))
+        console.log(randomnumber)
+        let img = document.createElement("img")
+        img.src = imagePieces[randomnumber]
+        img.draggable = true
+        img.ondragstart = drag
+        img.id = "p" + randomnumber
+        imagePieces.splice(randomnumber,1)
+        piece.appendChild(img)
     }
 }
+
+function getRndInteger(min, max) {
+    return Math.floor(Math.random() * (max - min + 1) ) + min;
+  }
 
 //Controller// This is the part which cut the image into pieces. 
 function cutImageUp() {
