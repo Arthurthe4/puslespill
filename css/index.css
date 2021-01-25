@@ -17,7 +17,7 @@ h1 {
   display: grid;
   margin: 0;
   position: absolute;
-  top: 60%;
+  top: 80%;
   left: 50%;
   transform: translate(-50%, -50%);
 }
