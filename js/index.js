@@ -39,7 +39,6 @@ function show() {
         div.style.height = heightOfOnePiece
         div.style.width = widthOfOnePiece
         puzzlearea.appendChild(div)
-
     }
 
 
@@ -87,3 +86,4 @@ function drop(ev) {
     }
     console.log(places)
 }
+

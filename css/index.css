@@ -7,7 +7,7 @@ body {
 }
 
 h1 {
-  font-size: 100px;
+  font-size: 80px;
   text-align: center;
 }
 
@@ -17,7 +17,7 @@ h1 {
   display: grid;
   margin: 0;
   position: absolute;
-  top: 50%;
+  top: 60%;
   left: 50%;
   transform: translate(-50%, -50%);
 }
@@ -34,16 +34,16 @@ h1 {
 }
 img {
   padding: 0px;
-  border: 0px
+  border: 0px;
 }
 .fill {
   display: flex;
   justify-content: center;
   align-items: center;
-  overflow: hidden
+  overflow: hidden;
 }
 .fill img {
   flex-shrink: 0;
   min-width: 100%;
-  min-height: 100%
+  min-height: 100%;
 }
