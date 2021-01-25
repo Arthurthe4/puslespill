@@ -7,7 +7,11 @@ var numRowsToCut = 3;
 var widthOfOnePiece = Math.floor(image.width/numColsToCut);
 var heightOfOnePiece = Math.floor(image.height/numRowsToCut);
 var imagePieces = [];
-var places = [];
+var puzzleplaces = [];
+var pieceplaces = [];
+var images = []
+start()
+console.log(images)
 
 //Viewer
 function show() {
@@ -29,44 +33,43 @@ function show() {
         var wr = w.repeat(numColsToCut)
         puzzlearea.style.gridTemplateColumns = wr
     }
-
+    //Puzzlearea
     for (let i = 0; i<= (numberofpieces-1); i++) {
         let div = document.createElement("div")
         div.id = i
-        div.addEventListener("drop", drop)
+        div.addEventListener("drop", dropA)
         div.addEventListener("dragover", allowDrop)
         div.classList.add("place")
         div.style.height = heightOfOnePiece
         div.style.width = widthOfOnePiece
+        //fill with pictures if necessary
+        if (puzzleplaces[i] != "") {
+            for( var a in images) {
+                if (images[a].id == puzzleplaces[i]) {
+                    div.appendChild(images[a])
+                }
+            }
+        }
         puzzlearea.appendChild(div)
-
     }
 
-
+    //Piecearea
     for (var i in imagePieces) {
-        places.push("")
         let div = document.createElement("div")
         div.id = "piece"+ i
-        div.ondrop = "drop"
+        div.ondrop = "dropB"
         div.ondragover = "allowDrop"
         div.width = widthOfOnePiece + "px"
         div.height = heightOfOnePiece + "px"
+        //fill with pictures if necessary
+        if (pieceplaces[i] != "") {
+            for( var a in images) {
+                if (images[a].id == puzzleplaces[i]) {
+                    div.appendChild(images[a])
+                }
+            }
+        }
         piecearea.appendChild(div)
-    }
-    var pieces = piecearea.children
-    console.log(pieces)
-    for ( var i=0; i<= (numberofpieces-1); i++) {
-        var piece = pieces[i];
-        console.log(piece)
-        var randomnumber = getRndInteger(0, (imagePieces.length-1))
-        console.log(randomnumber)
-        let img = document.createElement("img")
-        img.src = imagePieces[randomnumber]
-        img.draggable = true
-        img.ondragstart = drag
-        img.id = "p" + randomnumber
-        imagePieces.splice(randomnumber,1)
-        piece.appendChild(img)
     }
 }
 
@@ -74,7 +77,9 @@ function getRndInteger(min, max) {
     return Math.floor(Math.random() * (max - min + 1) ) + min;
   }
 
-//Controller// This is the part which cut the image into pieces. 
+//Controller
+
+// This is the part which cut the image into pieces. 
 function cutImageUp() {
     for (var y = 0; y < numRowsToCut; ++y) {
         for (var x = 0; x < numColsToCut; ++x) {
@@ -87,21 +92,63 @@ function cutImageUp() {
         }
     }// imagePieces now contains data urls of all the pieces of the image
 }
+// Setting up a new game
+function start() {
+
+    for ( var i in imagePieces) {
+        pieceplaces.push("p"+i)
+        puzzleplaces.push("")    
+    }
+    for (var n = 0; n <= pieceplaces.length; n++) {
+        var num = getRndInteger(0, (pieceplaces-1))
+        const tmp = pieceplaces[n]
+        pieceplaces[n] = pieceplaces[num]
+        pieceplaces[num] = tmp
+    }
+    for ( var p in imagePieces) {
+        let img = document.createElement("img")
+        img.src = imagePieces[p]
+        img.draggable = true
+        img.ondragstart = drag
+        img.id = "p" + p
+        images.push(img)
+    }
+}
 // Drag and Drop func
 function allowDrop(ev) {
     ev.preventDefault();
 }
 function drag(ev) {
     ev.dataTransfer.setData("text", ev.target.id)
-    if (ev.target.parentNode.id.length == 1) places[ev.target.parentNode.id] = "";
-    
+    ev.dataTransfer.setData("parent", ev.target.parentNode.id)    
 }
-function drop(ev) {
+function dropA(ev) {
     ev.preventDefault();
-    var data = ev.dataTransfer.getData("text");
-    if ( places[ev.target.id] == "") {
-        ev.target.appendChild(document.getElementById(data));
-        places[ev.target.id] = data
-    }
-    console.log(places)
+    var imgID = ev.dataTransfer.getData("text");
+    var formerparentID = ev.dataTransfer.getData("parent")
+        if ( puzzleplaces[ev.target.id] == "") {
+            puzzleplaces[ev.target.id] = imgID;
+            if(formerparentID.length = 1) {
+                puzzleplaces[formerparentID] = ""
+            }
+            else {
+                pieceplaces[formerparentID[5]] == ""
+            }
+        }
+    show()
+}
+function dropB(ev) {
+    ev.preventDefault()
+    var imgID = ev.dataTransfer.getData("text");
+    var formerparentID = ev.dataTransfer.getData("parent")
+        if ( puzzleplaces[ev.target.id[5]] == "") {
+            puzzleplaces[ev.target.id[5]] = imgID;
+            if(formerparentID.length = 1) {
+                puzzleplaces[formerparentID] = ""
+            }
+            else {
+                pieceplaces[formerparentID[5]] == ""
+            }
+        }
+    show()
 }
